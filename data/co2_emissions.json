@@ -1,0 +1,188 @@
+[
+  {
+    "year": 2022,
+    "total_emission": 1012,
+    "unit": "千t-CO2",
+    "breakdown": [
+      {
+        "sector": "エネルギー転換",
+        "emission": 4
+      },
+      {
+        "sector": "産業",
+        "emission": 54
+      },
+      {
+        "sector": "民生（家庭）",
+        "emission": 356
+      },
+      {
+        "sector": "民生（業務）",
+        "emission": 337
+      },
+      {
+        "sector": "運輸",
+        "emission": 231
+      },
+      {
+        "sector": "廃棄物",
+        "emission": 30
+      }
+    ]
+  },
+  {
+    "year": 2021,
+    "total_emission": 1017,
+    "unit": "千t-CO2",
+    "breakdown": [
+      {
+        "sector": "エネルギー転換",
+        "emission": 3
+      },
+      {
+        "sector": "産業",
+        "emission": 48
+      },
+      {
+        "sector": "民生（家庭）",
+        "emission": 374
+      },
+      {
+        "sector": "民生（業務）",
+        "emission": 340
+      },
+      {
+        "sector": "運輸",
+        "emission": 224
+      },
+      {
+        "sector": "廃棄物",
+        "emission": 28
+      }
+    ]
+  },
+  {
+    "year": 2020,
+    "total_emission": 1039,
+    "unit": "千t-CO2",
+    "breakdown": [
+      {
+        "sector": "エネルギー転換",
+        "emission": 4
+      },
+      {
+        "sector": "産業",
+        "emission": 54
+      },
+      {
+        "sector": "民生（家庭）",
+        "emission": 384
+      },
+      {
+        "sector": "民生（業務）",
+        "emission": 347
+      },
+      {
+        "sector": "運輸",
+        "emission": 225
+      },
+      {
+        "sector": "廃棄物",
+        "emission": 25
+      }
+    ]
+  },
+  {
+    "year": 2016,
+    "total_emission": 1179,
+    "unit": "千t-CO2",
+    "breakdown": [
+      {
+        "sector": "エネルギー転換",
+        "emission": 2
+      },
+      {
+        "sector": "産業",
+        "emission": 61
+      },
+      {
+        "sector": "民生（家庭）",
+        "emission": 438
+      },
+      {
+        "sector": "民生（業務）",
+        "emission": 394
+      },
+      {
+        "sector": "運輸",
+        "emission": 258
+      },
+      {
+        "sector": "廃棄物",
+        "emission": 26
+      }
+    ]
+  },
+  {
+    "year": 2013,
+    "total_emission": 1285,
+    "unit": "千t-CO2",
+    "breakdown": [
+      {
+        "sector": "エネルギー転換",
+        "emission": 2
+      },
+      {
+        "sector": "産業",
+        "emission": 72
+      },
+      {
+        "sector": "民生（家庭）",
+        "emission": 484
+      },
+      {
+        "sector": "民生（業務）",
+        "emission": 426
+      },
+      {
+        "sector": "運輸",
+        "emission": 273
+      },
+      {
+        "sector": "廃棄物",
+        "emission": 28
+      }
+    ]
+  },
+  {
+    "year": 1990,
+    "total_emission": 907,
+    "unit": "千t-CO2",
+    "breakdown": [
+      {
+        "sector": "エネルギー転換",
+        "emission": 2
+      },
+      {
+        "sector": "産業",
+        "emission": 83
+      },
+      {
+        "sector": "民生（家庭）",
+        "emission": 292
+      },
+      {
+        "sector": "民生（業務）",
+        "emission": 243
+      },
+      {
+        "sector": "運輸",
+        "emission": 258
+      },
+      {
+        "sector": "廃棄物",
+        "emission": 29
+      }
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    /* 基本的なオプション */
+    "target": "es6",                     // コンパイル後のJavaScriptバージョン
+    "module": "es6",                     // モジュールの形式
+    "strict": true,                      // 厳格な型チェックを有効にする (推奨)
+    "esModuleInterop": true,
+
+    "lib": ["es2019", "dom"], // flatMap(es2019)とブラウザAPI(dom)を認識させる
+
+    /* プロジェクトの構成 */
+    "rootDir": "./typescript",           // TypeScriptソースファイルの場所
+    "outDir": "./static/js"              // コンパイル後のJavaScriptの出力先
+  },
+  "include": [
+    "./typescript/**/*"                 // コンパイル対象のファイル
+  ]
+}

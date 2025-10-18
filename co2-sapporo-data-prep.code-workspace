@@ -1,0 +1,28 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    // VS Codeに仮想環境のPythonインタープリタを教える
+    "python.defaultInterpreterPath": "${workspaceFolder}/env/bin/python"
+  },
+  "extensions": {
+    // --- このワークスペースで推奨される拡張機能 ---
+    "recommendations": [
+      // Python言語サポート（仮想環境の認識に必須）
+      "ms-python.python",
+      // 利用中止 Codeium（AIコーディングアシスタント）
+      // "codeium.codeium",
+      // Remote - WSL (Remote Development Packをインストールしていれば、これも推奨しておくと安心)
+      "ms-vscode-remote.remote-wsl" 
+    ],
+    // --- このワークスペースで無効にしたい拡張機能（オプション） ---
+    // 他のAI補完ツールや、不要な言語/フォーマッタがあればここにIDを記述します。
+    "unwantedRecommendations": [
+      // 例: GitHub Copilotの拡張機能ID (使用しない場合)
+      "GitHub.copilot"
+    ]
+  }
+}

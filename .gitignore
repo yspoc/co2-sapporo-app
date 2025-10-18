@@ -1,0 +1,9 @@
+# Python 仮想環境
+env/
+__pycache__/
+
+# Node.js 依存関係
+node_modules/
+
+# OS固有ファイル
+.DS_Store
