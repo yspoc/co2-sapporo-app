@@ -1,59 +1,72 @@
-// Chart.jsの型定義。anyでも動きますが、より厳密にする場合は@types/chart.jsをインストールします。
 declare const Chart: any;
 
-// --- 型定義 (TypeScriptのメリット) ---
-// データの構造を「型」として定義することで、コードの安全性が向上します。
+// --- 型定義 (変更なし) ---
 interface BreakdownEntry {
   sector: string;
   emission: number;
 }
-
 interface YearData {
   year: number;
   total_emission: number;
   unit: string;
   breakdown: BreakdownEntry[];
 }
+interface ApiData {
+  citation: string;
+  data: YearData[];
+}
 
-// Chart.jsに渡すデータセットの型
+// ★★★ 1. ChartDatasetの data の型を変更 (number[] -> {x: number, y: number}[]) ★★★
 interface ChartDataset {
   label: string;
-  data: number[];
+  data: { x: number; y: number; }[]; // 型を変更
   backgroundColor: string;
   borderColor: string;
   fill: boolean;
 }
 
-
-// --- メインのロジック ---
 const colors: string[] = [
   'rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)',
   'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.8)'
 ];
 
-// 型注釈: myChartはChartインスタンスか、まだ存在しない(null)かを示す
 let myChart: any | null = null; 
-let chartData: { labels: number[]; datasets: ChartDataset[] } = { labels: [], datasets: [] };
+// ★★★ 2. chartDataの型から labels を削除 ★★★
+let chartData: { datasets: ChartDataset[] } = { datasets: [] };
 
 // グラフを描画する関数
-// 型注釈: type引数は 'bar' または 'line' のどちらかでなければならない
 function renderChart(type: 'bar' | 'line'): void {
   if (myChart) {
     myChart.destroy();
   }
   
   const ctx = (document.getElementById('co2Chart') as HTMLCanvasElement).getContext('2d');
-  if (!ctx) return; // コンテキストが取得できなければ処理を中断
+  if (!ctx) return; 
 
   myChart = new Chart(ctx, {
     type: type,
-    data: chartData,
+    data: chartData, // data.labels を含まないオブジェクト
     options: {
+      maintainAspectRatio: false, 
       responsive: true,
       plugins: { title: { display: true, text: '単位：千t-CO2' } },
       scales: {
-        x: { stacked: type === 'bar' },
-        y: { stacked: type === 'bar', beginAtZero: true, title: { display: true, text: '排出量' } }
+        // ★★★ 3. x軸のタイプを 'linear' に変更 ★★★
+        x: {
+          type: 'linear', // ★ 変更
+          stacked: type === 'bar',
+          // Ticks(目盛り)のフォーマットを修正 (例: 2,020 とカンマが入るのを防ぐ)
+          ticks: {
+             callback: function(value: any) {
+                return value; // 年をそのまま表示
+             }
+          }
+        },
+        y: { 
+          stacked: type === 'bar', 
+          beginAtZero: true, 
+          title: { display: true, text: '排出量' } 
+        }
       },
       elements: { line: { tension: 0.1 } }
     }
@@ -63,19 +76,30 @@ function renderChart(type: 'bar' | 'line'): void {
 // データを準備してグラフを初期化する非同期関数
 async function initializeChart(): Promise<void> {
   const response = await fetch('/api/data');
-  // 型注釈: fetchで取得したデータがYearDataの配列であることを明示
-  const data: YearData[] = await response.json();
+  const apiResponse: ApiData = await response.json();
+  
+  const citationText: string = apiResponse.citation;
+  const data: YearData[] = apiResponse.data;
+
   data.sort((a, b) => a.year - b.year);
 
-  const labels = data.map(item => item.year);
+  const citationElement = document.getElementById('citation-source');
+  if (citationElement) {
+    citationElement.innerText = citationText;
+  }
+  
   const sectors = [...new Set(data.flatMap((item: YearData) => item.breakdown.map((b: BreakdownEntry) => b.sector)))];
- 
-  const datasets: ChartDataset[] = sectors.map((sector, index) => {
+
+  const datasets: ChartDataset[] = sectors.map((sector: string, index) => {
     return {
       label: sector,
+      // ★★★ 4. data の形式を {x: 年, y: 排出量} に変更 ★★★
       data: data.map(yearData => {
         const sectorData = yearData.breakdown.find(b => b.sector === sector);
-        return sectorData ? sectorData.emission : 0;
+        return {
+          x: yearData.year, // x に年を設定
+          y: sectorData ? sectorData.emission : 0 // y に排出量を設定
+        };
       }),
       backgroundColor: colors[index % colors.length],
       borderColor: colors[index % colors.length].replace('0.8', '1'),
@@ -83,16 +107,14 @@ async function initializeChart(): Promise<void> {
     };
   });
   
-  chartData = { labels, datasets };
+  // ★★★ 5. chartDataに labels を渡さないように変更 ★★★
+  chartData = { datasets: datasets };
   renderChart('bar');
 }
 
-// ボタン要素を取得し、イベントリスナーを設定
+// (...ボタンのイベントリスナーと initializeChart() 呼び出しは変更なし...)
 const barBtn = document.getElementById('barBtn');
 const lineBtn = document.getElementById('lineBtn');
-
 barBtn?.addEventListener('click', () => renderChart('bar'));
 lineBtn?.addEventListener('click', () => renderChart('line'));
-
-// 実行開始
 initializeChart();

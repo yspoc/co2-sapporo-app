@@ -10,7 +10,6 @@ page_number = '3'
 output_dir = 'data'
 output_path = os.path.join(output_dir, 'co2_emissions.json')
 
-# ★★★★★ ここを修正：カッコを全角に変更 ★★★★★
 TARGET_SECTORS = [
     'エネルギー転換', '産業', '民生（家庭）',
     '民生（業務）', '運輸', '廃棄物'
@@ -23,7 +22,7 @@ def clean_text(text):
         text = text.translate(str.maketrans('０１２３４５６７８９，', '0123456789,'))
     return text
 
-# --- メイン処理（以降は変更なし） ---
+# --- メイン処理 ---
 try:
     os.makedirs(output_dir, exist_ok=True)
     tables = camelot.read_pdf(file_path, pages=page_number, flavor='lattice')
@@ -66,6 +65,7 @@ try:
         else:
             processed_headers.append(header)
 
+    # ★★★★★ ここが前回の指示で抜けていた部分です ★★★★★
     df.columns = processed_headers
     df_data = df.iloc[header_row_index + 1:].reset_index(drop=True)
     
@@ -74,6 +74,7 @@ try:
     
     if df_data.empty:
         raise Exception("フィルタリング後、データが空になりました。")
+    # ★★★★★ ここまで ★★★★★
 
     final_data = []
     year_columns = [col for col in df_data.columns if '年度' in str(col)]
@@ -93,13 +94,28 @@ try:
         })
 
     final_data.sort(key=lambda x: x['year'], reverse=True)
+    
+    # ★★★★★ ここからがJSONの構造を変更する部分 ★★★★★
+    
+    # 1. 引用元テキストを定義
+    citation_text = (
+        "引用元：以下の公開データ\n"
+        "「札幌市気候変動対策行動計画」進行管理報告書 2022 年速報値・ 2020 年確定値）ー 資料編 ー 2024年10月"
+    )
+    
+    # 2. 最終的なJSONオブジェクトを作成
+    final_json_output = {
+        "citation": citation_text,
+        "data": final_data  # これまでの配列データを 'data' キーに入れる
+    }
 
+    # JSONファイルとして保存
     with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(final_data, f, ensure_ascii=False, indent=2)
+        json.dump(final_json_output, f, ensure_ascii=False, indent=2)
 
     print(f"\nデータの変換に成功し、'{output_path}'に保存しました。")
-    print("\n--- 生成されたJSONデータの先頭部分 ---")
-    print(json.dumps(final_data[0], ensure_ascii=False, indent=2))
+    print("\n--- 生成されたJSON（全体像） ---")
+    print(json.dumps(final_json_output, ensure_ascii=False, indent=2))
 
 
 except Exception as e:
